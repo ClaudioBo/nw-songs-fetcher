@@ -103,7 +103,7 @@ if __name__ == "__main__":
    max_id = 605000 #cantidad hardcodeada pq me interesan las que vienen antes de esta id
 
    try:
-      if(sys.argv > 1):
+      if(len(sys.argv) > 1):
          min_id = int(sys.argv[1])
          if(sys.argv == 3):
             max_id = int(sys.argv[2])
