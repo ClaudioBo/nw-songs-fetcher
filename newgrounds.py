@@ -80,12 +80,12 @@ def getAudioDuration(songID):
    webdata = htmlmin.minify(webUrl.text, remove_empty_space=True)
    if(webdata.find("You're making too many requests.") != -1):
       raise requests.exceptions.HTTPError('Too many requests')
-   if(webdata.find("ERROR &mdash;") <= 0):
+   if(webdata.find("ERROR &mdash;") == -1):
       strDuration = webdata.split("<dt>File Info</dt>")[1].split("</dd>",3)[2].replace("<dd> ","")
       minutes = 0
       seconds = 0
 
-      if(strDuration.find(" min")==1):
+      if(strDuration.find(" min")>=0):
          seconds = int(strDuration.split("min ")[1].split(" sec")[0])
          minutes = int(strDuration.split(" min")[0])
          pass
@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
    #get args
    #19760
-   min_id = 24016  #esto deberia ser 0, pero ya escanie las anteriores huahuahuehuehueheuahuahuaha
+   min_id = 36037  #esto deberia ser 0, pero ya escanie las anteriores huahuahuehuehueheuahuahuaha
    max_id = 605000 #cantidad hardcodeada pq me interesan las que vienen antes de esta id
 
    try:
@@ -190,3 +190,12 @@ if __name__ == "__main__":
    print " Eliminadas o inexistentes: {}".format(str(notfound_counter))
    
    closeLogFiles()
+
+
+# 36036 (2:48) - Rechazado (Cancion no dura o excede de 1:20 >=< 3:20) [5%]
+# Traceback (most recent call last):
+#   File "newgrounds.py", line 145, in <module>
+#     duration = getAudioDuration(id)
+#   File "newgrounds.py", line 93, in getAudioDuration
+#     seconds = int(strDuration.split(" sec")[0])
+# ValueError: invalid literal for int() with base 10: '11 min 45'
