@@ -3,9 +3,9 @@ import requests, htmlmin, time, sys
 NEWGROUNDS_URL = "https://www.newgrounds.com/audio/listen/"
 
 MAX_LENGTH_MIN = 3
-MAX_LENGTH_SEC = 30
 MIN_LENGTH_MIN = 1
-MIN_LENGTH_SEC = 20
+# MAX_LENGTH_SEC = 30
+# MIN_LENGTH_SEC = 20
 
 log_accepted = open("aceptadas.txt","a+")
 log_rejected = open("rechazadas.txt","a+")
@@ -61,9 +61,9 @@ def isWithinRange(duration):
    if(minutes > MAX_LENGTH_MIN or minutes < MIN_LENGTH_MIN):
       return False
       
-   seconds = duration[1]
-   if(seconds > MAX_LENGTH_SEC or seconds < MIN_LENGTH_SEC):
-      return False
+   # seconds = duration[1]
+   # if(seconds > MAX_LENGTH_SEC or seconds < MIN_LENGTH_SEC):
+   #    return False
    return True
 
 def getAudioDuration(songID):
@@ -98,14 +98,13 @@ def getAudioDuration(songID):
 if __name__ == "__main__":
 
    #get args
-   #19760
-   min_id = 36037  #esto deberia ser 0, pero ya escanie las anteriores huahuahuehuehueheuahuahuaha
+   min_id = 0
    max_id = 605000 #cantidad hardcodeada pq me interesan las que vienen antes de esta id
 
    try:
-      if(len(sys.argv) > 1):
+      if(len(sys.argv) >= 2):
          min_id = int(sys.argv[1])
-         if(sys.argv == 3):
+         if(len(sys.argv) >= 3):
             max_id = int(sys.argv[2])
    except Exception, e:
       print "Debes escribir un numero valido la concha de tu hermana"
@@ -146,11 +145,11 @@ if __name__ == "__main__":
             if(duration is not None):
                if(isWithinRange(duration)):
                   log(log_accepted,str(id))
-                  print "{} ({}:{}) - Aceptado (Cancion dura entre 1:20 >=< 3:20) [{}%]".format(str(id), str(duration[0]), str(duration[1]), str((id*100)/605000))
+                  print "{} ({}:{}) - Aceptado (Cancion dura entre 1m >=< 3m) [{}%]".format(str(id), str(duration[0]), str(duration[1]), str((id*100)/605000))
                   accepted_counter+=1
                   pass
                else:
-                  print "{} ({}:{}) - Rechazado (Cancion no dura o excede de 1:20 >=< 3:20) [{}%]".format(str(id), str(duration[0]), str(duration[1]), str((id*100)/605000))
+                  print "{} ({}:{}) - Rechazado (Cancion no dura o excede de 1m >=< 3m) [{}%]".format(str(id), str(duration[0]), str(duration[1]), str((id*100)/605000))
                   log(log_rejected,str(id))
                   rejected_counter+=1
                   pass
@@ -190,12 +189,3 @@ if __name__ == "__main__":
    print " Eliminadas o inexistentes: {}".format(str(notfound_counter))
    
    closeLogFiles()
-
-
-# 36036 (2:48) - Rechazado (Cancion no dura o excede de 1:20 >=< 3:20) [5%]
-# Traceback (most recent call last):
-#   File "newgrounds.py", line 145, in <module>
-#     duration = getAudioDuration(id)
-#   File "newgrounds.py", line 93, in getAudioDuration
-#     seconds = int(strDuration.split(" sec")[0])
-# ValueError: invalid literal for int() with base 10: '11 min 45'
